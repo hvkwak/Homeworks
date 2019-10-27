@@ -1,4 +1,4 @@
-## CourseWorks
+# CourseWorks
 * My works during the course M.Sc. Datenwissenschaft at TU Dortmund, Germany
 * Please note: Unauthorized distribution of the codes are not allowed.
 
