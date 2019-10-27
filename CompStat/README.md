@@ -1,8 +1,8 @@
 ### Computer Based Statistics(Computergestuetzte Statistik) Tutorials, WiSe 18-19
 
-## Please note: Unauthorized distribution of the codes is not allowed.
-## Tutorial Contents
+# Please note: Unauthorized distribution of the codes is not allowed.
 
+## Tutorial Contents
 Week 1. Greatest common divisor (ggT), Fibonacci numbers, Concept of Algorithms: Addition and Multiplication
 
 Week 2. BubbleSort, BucketSort, MergeSort
