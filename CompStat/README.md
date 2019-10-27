@@ -1,4 +1,4 @@
-## Computer Based Statistics(Computergestuetzte Statistik) Tutorials, WiSe 18-19
+### Computer Based Statistics(Computergestuetzte Statistik) Tutorials, WiSe 18-19
 ### Please note: Unauthorized distribution of the codes is not allowed.
 
 ## Tutorial Contents
