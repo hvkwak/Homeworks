@@ -2,7 +2,6 @@ Data Structures, Algorithms, Programming 2(DAP2), TU Dortmund, Germany
 
 Here are my works during the DAP2-Praktikums.
 
-1. I've lost this file.
 2. insertionSort()
 3. bubbleSort() and GeometricSearch()
 4. EuclidDistance() and SimpleConvexHull()
@@ -12,3 +11,6 @@ Here are my works during the DAP2-Praktikums.
 6. Greedy-Algorithm problems
     6.1: IntervalScheduling()
     6.2: LatenessScheduling()
+7. Longest Common Subsequence(LCS)
+8. Editierdistanz und Ausgabe der Editieroperationen
+9. Traversieren von Binärbäumen / Rucksackproblem
