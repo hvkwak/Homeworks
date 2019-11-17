@@ -12,4 +12,4 @@ Here are my works during the DAP2-Praktikums.
     6.1: IntervalScheduling()
     6.2: LatenessScheduling()
 7. Longest Common Subsequence(LCS)
-
+8. Editierdistanz und Ausgabe der Editieroperationen
