@@ -13,3 +13,4 @@ Here are my works during the DAP2-Praktikums.
     6.2: LatenessScheduling()
 7. Longest Common Subsequence(LCS)
 8. Editierdistanz und Ausgabe der Editieroperationen
+9. Traversieren von Binärbäumen / Rucksackproblem
