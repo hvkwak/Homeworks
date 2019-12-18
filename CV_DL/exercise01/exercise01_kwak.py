@@ -1,11 +1,10 @@
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import numpy as np
 
 tf.disable_eager_execution()
-
 # instead of: tf.reset_default_graph()
 # initialize a default graph:
-tf.reset_default_graph() 
+tf.reset_default_graph()
 
 # initial Variable of x = [2, 1] : Initial Value
 # constant variable of y = [3, 5] : Target
@@ -29,5 +28,19 @@ with tf.Session() as sess:
         print(loss.eval( feed_dict={z:z_}) )
         print( x.eval() )
 
-# Alternatively we could remove z and optimize the loss, so that x
-# converges to [3, 5].
+# Alternatively we could remove z and optimize the loss
+# xx = [2, 1]
+# yy = [1, 5]
+tf.reset_default_graph()
+xx = tf.Variable(np.array([2, 1]), dtype=tf.float32, name = "xx")
+yy = tf.constant(np.array([1, 5]), dtype=tf.float32, name = "yy") # this changes not
+new_loss = tf.reduce_sum((xx - yy)**2)
+new_train_step = tf.train.GradientDescentOptimizer(0.1).minimize(new_loss)
+
+with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer()) # To have these variables initialized 
+    for k in range(100):
+        new_train_step.run()
+        print("Step No. %d" % k)
+        print(new_loss.eval() )
+        print( xx.eval() )
