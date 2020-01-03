@@ -15,6 +15,9 @@ def one_hot_encoder(index, num_classes):
     return(y)
 
 def one_hot_mat(y_train):
+    '''
+        returns a matrix, which is the collection of one hot encoding.
+    '''
     memory_mat = np.zeros((np.prod(y_train.shape), 10))
     for i in range(memory_mat.shape[0]):
         y_vec = y_train.flatten()
