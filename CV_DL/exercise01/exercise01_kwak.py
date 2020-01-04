@@ -28,9 +28,11 @@ with tf.Session() as sess:
         print(loss.eval( feed_dict={z:z_}) )
         print( x.eval() )
 
-# Alternatively we could remove z and optimize the loss
+# Alternatively we could just replace (-y + z_) to yy.
+# yy = (-y + z_)
 # xx = [2, 1]
 # yy = [1, 5]
+# xx converges to [1, 5] anyway.
 tf.reset_default_graph()
 xx = tf.Variable(np.array([2, 1]), dtype=tf.float32, name = "xx")
 yy = tf.constant(np.array([1, 5]), dtype=tf.float32, name = "yy") # this changes not
