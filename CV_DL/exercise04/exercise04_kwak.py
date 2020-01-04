@@ -1,7 +1,13 @@
+'''
+    created by: Dr. Sebastian Houben, sebastian.houben@ini.rub.de
+    additionally commented by: Hyovin Kwak
+'''
+
 import tensorflow.compat.v1 as tf
 import numpy as np
 from DLCVDatasets import get_dataset
 import math
+import os
 
 def get_progress_arrow(width: int, progress: float):
     num_progress = math.floor(width * progress)
@@ -31,7 +37,6 @@ class Network:
 
 
 
-
 def get_network_graph(num_features, num_classes,
                       num_layers, activation_function,
                       learning_rate = 0.1):
@@ -42,24 +47,32 @@ def get_network_graph(num_features, num_classes,
     tf.disable_eager_execution()
     tf.reset_default_graph()
 
+    # x and y of Network n are placeholders.
     # n.x : placeholder. no matter the number of row, it works.
     n.x = tf.placeholder(tf.float32, shape=[None, num_features], name="images")
     n.y_ = tf.placeholder(tf.int32, shape=[None], name="labels")
 
     current_layer = n.x
 
+    # Add hidden layers.
+    
     # First hidden layer
     # variables are in the scope of Layer1:
     with tf.variable_scope("Layer1"):
+        
+        # not to forget that the dimension of the weight matrix and bias vector
+        # is transposed.
         w = tf.get_variable("weights", shape=[num_features, num_hidden_neurons])
         b = tf.get_variable("offsets", shape=[1, num_hidden_neurons])
+
+        # w(weights) shape of (num_features, num_hidden_neurons) added.
+        # b(biases) shape of (1, num_hidden_neurons) biases added.
         n.weights.append(w)
         n.biases.append(b)
         
         # check the dimension of tf.matmul and activation function.
         current_layer = activation_function(tf.matmul(current_layer, w) + b)
 
-    '''
     # Other hidden layers
     for i in range(2, num_layers + 1):
         with tf.variable_scope("Layer" + str(i)):
@@ -68,7 +81,6 @@ def get_network_graph(num_features, num_classes,
             n.weights.append(w)
             n.biases.append(b)
             current_layer = activation_function(tf.matmul(current_layer, w) + b)
-    '''
 
     # Output layer
     with tf.variable_scope("LayerOutput"):
@@ -80,14 +92,17 @@ def get_network_graph(num_features, num_classes,
 
     correct_labels = n.y_
     predicted_labels = tf.argmax(y_unscaled, axis=1, output_type=tf.int32)
+    
+    # change the true/falses to float32.
     correct_prediction = tf.cast(tf.equal(correct_labels, predicted_labels), tf.float32)
     n.accuracy = tf.reduce_sum(correct_prediction) / tf.cast(tf.shape(correct_prediction)[0], tf.float32)
 
-    # loss, train_step, init_op.
+    # loss, train_step, variables initilizer
     n.loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=y_unscaled, labels=n.y_))
     n.train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(n.loss)
     n.init_op = tf.global_variables_initializer()
 
+    # return the network.
     return n
 
 
@@ -102,16 +117,16 @@ def train_network(n, tr_data, tr_labels,
 
     num_batches = math.ceil(sample_size / batch_size)
     total_iterations = num_epochs * num_batches
-    last_whole_percent = 0
+    last_progress_in_percent = 0
 
-    # Train network
+    # Train network: loss and train_step update
+
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
-
     with tf.Session(config=config) as sess:
 
         sess.run(n.init_op) # variables initializer
-        old_weights = [w.eval() for w in n.weights] # old weights.
+        old_weights = [w.eval() for w in n.weights] # a list of weights.
 
         for epoch in range(num_epochs): # per epoch
             for batch in range(num_batches): # per batch
@@ -121,6 +136,7 @@ def train_network(n, tr_data, tr_labels,
                 batch_end = batch_start + batch_size
 
                 # run train_step and loss
+                # you can train and compute loss at the same time like this:
                 _, loss_val = sess.run((n.train_step, n.loss), 
                                         feed_dict={
                                         n.x : tr_data[batch_start:batch_end],
@@ -131,9 +147,9 @@ def train_network(n, tr_data, tr_labels,
                 # Print status at certain intervals
                 iteration = epoch * num_batches + batch
                 progress = (iteration + 1) / total_iterations
-                whole_percent = math.floor(progress * 100)
+                progress_in_percent = math.floor(progress * 100)
 
-                if iteration == 0 or last_whole_percent != whole_percent:
+                if iteration == 0 or last_progress_in_percent != progress_in_percent:
                     # Calculate change in weights after each batch
                     weight_change = np.asarray([np.mean(np.abs(old - new))
                                                 for old, new in zip(old_weights, new_weights)])
@@ -145,15 +161,19 @@ def train_network(n, tr_data, tr_labels,
                         epoch + 1, num_epochs, get_progress_arrow(20, progress), progress * 100,
                         loss_val, training_accuracy * 100, testing_accuracy * 100, weight_change
                     ), end="")
-                last_whole_percent = whole_percent
+                
+                # progress and weights update:
+                last_progress_in_percent = progress_in_percent
                 old_weights = new_weights
 
+                # every 5 epoch print an additional new line.
                 if batch == 0 and epoch % 5 == 0:
                     # After the first batch of some epochs print a new line to keep a history in console
                     print("")
 
         print("")  # New line
 
+        # check the accuracy after training.
         training_accuracy = n.accuracy.eval(feed_dict={n.x: tr_data, n.y_: tr_labels})
         testing_accuracy = n.accuracy.eval(feed_dict={n.x: ts_data, n.y_: ts_labels})
         print("Finished training with {:4.1f}% training and {:4.1f}% testing accuracy"
@@ -176,6 +196,7 @@ def build_and_train_network(train_data, train_labels,
     # Build network
     network = get_network_graph(num_features, num_classes, num_layers, activation_function, learning_rate)
 
+    # train the network and show the results:
     train_network(network, train_data, train_labels, test_data, test_labels, num_epochs)
 
 def reshape_and_normalize_data(x_train, x_test):
