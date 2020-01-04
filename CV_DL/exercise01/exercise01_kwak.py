@@ -23,7 +23,7 @@ z_ = np.array([[2,0]])
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer()) # To have these variables initialized 
     for k in range(100):
-        train_step.run( feed_dict={z:z_})
+        sess.run(train_step, feed_dict={z:z_}) #train_step.run( feed_dict={z:z_})
         print("Step No. %d" % k)
         print(loss.eval( feed_dict={z:z_}) )
         print( x.eval() )
