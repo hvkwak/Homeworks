@@ -131,7 +131,7 @@ def get_network_graph(image_shape, num_classes,
 
 def train_network(n, tr_data, tr_labels,
                   ts_data, ts_labels,
-                  num_epochs= 20, batch_size = 128):
+                  num_epochs= 20, batch_size = 1024):
 
     sample_size = tr_data.shape[0]
     if batch_size is None:
@@ -144,7 +144,7 @@ def train_network(n, tr_data, tr_labels,
 
     # Train network: loss and train_step update
 
-    config = tf.ConfigProto()
+    config = tf.ConfigProto(device_count = {'GPU': 2})
     config.gpu_options.allow_growth = True
     with tf.Session(config=config) as sess:
 
@@ -275,8 +275,8 @@ def main():
     '''
     x_train, y_train, x_test, y_test, class_names = get_dataset('mnist', used_labels, training_size, test_size)    
     '''
-    x_train, y_train = loadMNIST( "train", "/data/MNIST/raw")
-    x_test, y_test = loadMNIST( "t10k", "/data/MNIST/raw")
+    x_train, y_train = loadMNIST( "train", "/home/hkwak/Documents/Workspace/MNIST")
+    x_test, y_test = loadMNIST( "t10k", "/home/hkwak/Documents/Workspace/MNIST")
     x_train, x_test = normalize_data(x_train, x_test)
 
     if len(x_train.shape) < 4:
