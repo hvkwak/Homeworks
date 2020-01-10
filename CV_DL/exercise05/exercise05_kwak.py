@@ -1,12 +1,13 @@
 '''
     created by: Hyovin Kwak
 '''
-
-import tensorflow.compat.v1 as tf
+import utils
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = str(utils.pick_gpu_lowest_memory())
+import tensorflow as tf
 import numpy as np
 # from DLCVDatasets import get_dataset
 import math
-import os
 
 def get_progress_arrow(width: int, progress: float):
     num_progress = math.floor(width * progress)
@@ -131,7 +132,7 @@ def get_network_graph(image_shape, num_classes,
 
 def train_network(n, tr_data, tr_labels,
                   ts_data, ts_labels,
-                  num_epochs= 20, batch_size = 128):
+                  num_epochs= 20, batch_size = 1024):
 
     sample_size = tr_data.shape[0]
     if batch_size is None:
