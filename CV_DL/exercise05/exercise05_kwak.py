@@ -4,7 +4,7 @@
 import utils
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = str(utils.pick_gpu_lowest_memory())
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import numpy as np
 # from DLCVDatasets import get_dataset
 import math
