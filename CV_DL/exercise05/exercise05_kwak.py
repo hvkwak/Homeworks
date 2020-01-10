@@ -1,12 +1,13 @@
 '''
     created by: Hyovin Kwak
 '''
-
-import tensorflow.compat.v1 as tf
+import utils
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = str(utils.pick_gpu_lowest_memory())
+import tensorflow as tf
 import numpy as np
 # from DLCVDatasets import get_dataset
 import math
-import os
 
 def get_progress_arrow(width: int, progress: float):
     num_progress = math.floor(width * progress)
