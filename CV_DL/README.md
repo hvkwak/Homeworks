@@ -6,4 +6,5 @@ Please note: Unauthorized distribution of the codes is not allowed.
 * Week 2. Linear Classification
 * Week 3. HOG feature extraction, linear classification, k-means clustering using the MNIST dataset
 * Week 4. Vanishing gradient problem
+* Week 5. Implementation of mini CNN to solve MNIST
 

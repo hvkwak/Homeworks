@@ -1,9 +1,12 @@
 '''
     created by: Hyovin Kwak
+    This is the modification of the code given during the tutorial by Dr. Sebastian Houben, sebastian.houben@ini.rub.de
 '''
+# enables GPU Computation
 import utils
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = str(utils.pick_gpu_lowest_memory())
+
 import tensorflow.compat.v1 as tf
 import numpy as np
 # from DLCVDatasets import get_dataset
@@ -61,7 +64,7 @@ def get_network_graph(image_shape, num_classes,
     tf.reset_default_graph()
 
     input_shape = image_shape
-    if len(input_shape) < 3: # only two elements like (28, 28)
+    if len(input_shape) < 3: # only two elements like (28, 28) could be a problem.
         input_shape = input_shape + (1,)
     
     # x and y of Network n are placeholders.
@@ -228,8 +231,9 @@ def build_and_train_network(train_data, train_labels,
 '''
 
 def normalize_data(x_train, x_test):
+
     
-    # Flatten all but first dimension (which are the different input images)
+    # no need to flatten the images
     # x_train = np.reshape(x_train, (x_train.shape[0], -1))
     # x_test = np.reshape(x_test, (x_test.shape[0], -1))
 
@@ -247,7 +251,7 @@ def normalize_data(x_train, x_test):
     x_train = x_train / std
     x_test = x_test / std
 
-    # return the normalized and flattened dataset
+    # return the normalized dataset
     return x_train, x_test
 
 def loadMNIST(prefix, folder):
@@ -261,10 +265,6 @@ def loadMNIST(prefix, folder):
 	labels = np.fromfile( folder + "/" + prefix + '-labels-idx1-ubyte',
                           dtype = 'ubyte' )[2 * intType.itemsize:]
 	return data, labels
-'''
-trainingImages, trainingLabels = loadMNIST( "train", "/data/MNIST/raw" )
-testImages, testLabels = loadMNIST( "t10k", "/data/MNIST/raw" )
-'''
 
 def main():
     # Adapt this to control the size of the training data
@@ -273,13 +273,16 @@ def main():
     test_size = 1000
     num_classes = len(used_labels)
 
-    '''
+    ''' Disabled method from DLCVDatasets.get_dataset()
     x_train, y_train, x_test, y_test, class_names = get_dataset('mnist', used_labels, training_size, test_size)    
     '''
+    # Load MNIST Files directly from a designated directory:
     x_train, y_train = loadMNIST( "train", "/home/hkwak/Documents/Workspace/MNIST")
     x_test, y_test = loadMNIST( "t10k", "/home/hkwak/Documents/Workspace/MNIST")
     x_train, x_test = normalize_data(x_train, x_test)
 
+	
+    # don't forget: np.newaxis
     if len(x_train.shape) < 4:
         x_train = x_train[:, :, :, np.newaxis]
         x_test = x_test[:, :, :, np.newaxis]
@@ -291,8 +294,6 @@ def main():
 
             # train the network and show the results:
             train_network(network, x_train, y_train, x_test, y_test, num_epochs = 20)
-
-            # build_and_train_network(x_train, y_train, x_test, y_test, num_classes, num_layers, activation_function)    
 
 if __name__ == "__main__":
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow GPU Debug Log Output
