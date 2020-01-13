@@ -2,10 +2,12 @@
     created by: Hyovin Kwak
     This is the modification of the code given during the tutorial by Dr. Sebastian Houben, sebastian.houben@ini.rub.de
 '''
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 # enables GPU Computation
 import utils
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = str(utils.pick_gpu_lowest_memory())
+# import os
+# os.environ["CUDA_VISIBLE_DEVICES"] = str(utils.pick_gpu_lowest_memory())
 
 import tensorflow.compat.v1 as tf
 import numpy as np
@@ -137,79 +139,81 @@ def train_network(n, tr_data, tr_labels,
                   ts_data, ts_labels,
                   num_epochs= 20, batch_size = 1024):
 
-    sample_size = tr_data.shape[0]
-    if batch_size is None:
-        # sample_size itself will be the batch_size.
-        batch_size = sample_size
+    gpu_num = str(utils.pick_gpu_lowest_memory())
+    with tf.device('/device:GPU:' + gpu_num)
+        sample_size = tr_data.shape[0]
+        if batch_size is None:
+            # sample_size itself will be the batch_size.
+            batch_size = sample_size
 
-    num_batches = math.ceil(sample_size / batch_size)
-    total_iterations = num_epochs * num_batches
-    last_progress_in_percent = 0
+        num_batches = math.ceil(sample_size / batch_size)
+        total_iterations = num_epochs * num_batches
+        last_progress_in_percent = 0
 
-    # Train network: loss and train_step update
+        # Train network: loss and train_step update
 
-    config = tf.ConfigProto(device_count = {'GPU': 2})
-    config.gpu_options.allow_growth = True
-    with tf.Session(config=config) as sess:
+        # config = tf.ConfigProto(device_count = {'GPU': 2})
+        # with tf.Session(config=config) as sess:
+        with tf.Session() as sess:
 
-        sess.run(n.init_op) # variables initializer
-        # old_weights = [w.eval() for w in n.weights] # a list of weights.
+            sess.run(n.init_op) # variables initializer
+            # old_weights = [w.eval() for w in n.weights] # a list of weights.
 
-        for epoch in range(num_epochs): # per epoch
-            for batch in range(num_batches): # per batch
+            for epoch in range(num_epochs): # per epoch
+                for batch in range(num_batches): # per batch
 
-                # batch_start and batch_end index
-                batch_start = batch * batch_size
-                batch_end = batch_start + batch_size
+                    # batch_start and batch_end index
+                    batch_start = batch * batch_size
+                    batch_end = batch_start + batch_size
 
-                # run train_step and loss
-                # you can train and compute loss at the same time like this:
-                _, loss_val = sess.run((n.train_step, n.loss), 
-                                        feed_dict={
-                                        n.x : tr_data[batch_start:batch_end],
-                                        n.y_: tr_labels[batch_start:batch_end],
-                                        })
-                new_weights = [w.eval() for w in n.weights]
+                    # run train_step and loss
+                    # you can train and compute loss at the same time like this:
+                    _, loss_val = sess.run((n.train_step, n.loss), 
+                                            feed_dict={
+                                            n.x : tr_data[batch_start:batch_end],
+                                            n.y_: tr_labels[batch_start:batch_end],
+                                            })
+                    new_weights = [w.eval() for w in n.weights]
 
-                # Print status at certain intervals
-                iteration = epoch * num_batches + batch
-                progress = (iteration + 1) / total_iterations
-                progress_in_percent = math.floor(progress * 100)
+                    # Print status at certain intervals
+                    iteration = epoch * num_batches + batch
+                    progress = (iteration + 1) / total_iterations
+                    progress_in_percent = math.floor(progress * 100)
 
-                if iteration == 0 or last_progress_in_percent != progress_in_percent:
-                    # Calculate change in weights after each batch
-                    '''
-                    weight_change = np.asarray([np.mean(np.abs(old - new))
-                                                for old, new in zip(old_weights, new_weights)])
-                    '''
-                    # Calculate training and testing accuracy
-                    training_accuracy = n.accuracy.eval(feed_dict={n.x: tr_data, n.y_: tr_labels})
-                    testing_accuracy = n.accuracy.eval(feed_dict={n.x: ts_data, n.y_: ts_labels})
-                    # Print status
-                    print("\r{:4d}/{} [{}] ({:3.0f}%), L: {:f}, ATrain: {:4.1f}%, ATest: {:4.1f}%".format(
-                        epoch + 1, num_epochs, get_progress_arrow(20, progress), progress * 100,
-                        loss_val, training_accuracy * 100, testing_accuracy * 100
-                    ), end="")
-                
-                # progress and weights update:
-                last_progress_in_percent = progress_in_percent
-                old_weights = new_weights
+                    if iteration == 0 or last_progress_in_percent != progress_in_percent:
+                        # Calculate change in weights after each batch
+                        '''
+                        weight_change = np.asarray([np.mean(np.abs(old - new))
+                                                    for old, new in zip(old_weights, new_weights)])
+                        '''
+                        # Calculate training and testing accuracy
+                        training_accuracy = n.accuracy.eval(feed_dict={n.x: tr_data, n.y_: tr_labels})
+                        testing_accuracy = n.accuracy.eval(feed_dict={n.x: ts_data, n.y_: ts_labels})
+                        # Print status
+                        print("\r{:4d}/{} [{}] ({:3.0f}%), L: {:f}, ATrain: {:4.1f}%, ATest: {:4.1f}%".format(
+                            epoch + 1, num_epochs, get_progress_arrow(20, progress), progress * 100,
+                            loss_val, training_accuracy * 100, testing_accuracy * 100
+                        ), end="")
+                    
+                    # progress and weights update:
+                    last_progress_in_percent = progress_in_percent
+                    old_weights = new_weights
 
-                # every 5 epoch print an additional new line.
-                if batch == 0 and epoch % 5 == 0:
-                    # After the first batch of some epochs print a new line to keep a history in console
-                    print("")
+                    # every 5 epoch print an additional new line.
+                    if batch == 0 and epoch % 5 == 0:
+                        # After the first batch of some epochs print a new line to keep a history in console
+                        print("")
 
-        print("")  # New line
+            print("")  # New line
 
-        # check the accuracy after training.
-        training_accuracy = n.accuracy.eval(feed_dict={n.x: tr_data, n.y_: tr_labels})
-        testing_accuracy = n.accuracy.eval(feed_dict={n.x: ts_data, n.y_: ts_labels})
-        print("Finished training with {:4.1f}% training and {:4.1f}% testing accuracy"
-              .format(training_accuracy * 100, testing_accuracy * 100))
+            # check the accuracy after training.
+            training_accuracy = n.accuracy.eval(feed_dict={n.x: tr_data, n.y_: tr_labels})
+            testing_accuracy = n.accuracy.eval(feed_dict={n.x: ts_data, n.y_: ts_labels})
+            print("Finished training with {:4.1f}% training and {:4.1f}% testing accuracy"
+                .format(training_accuracy * 100, testing_accuracy * 100))
 
-        # Return training and testing error rate
-        return 1 - training_accuracy, 1 - testing_accuracy
+            # Return training and testing error rate
+            return 1 - training_accuracy, 1 - testing_accuracy
 
 '''
 def build_and_train_network(train_data, train_labels,
