@@ -6,7 +6,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 # enables GPU Computation
 import utils
-# import os
+import os
 # os.environ["CUDA_VISIBLE_DEVICES"] = str(utils.pick_gpu_lowest_memory())
 
 import tensorflow.compat.v1 as tf
@@ -140,7 +140,7 @@ def train_network(n, tr_data, tr_labels,
                   num_epochs= 20, batch_size = 1024):
 
     gpu_num = str(utils.pick_gpu_lowest_memory())
-    with tf.device('/device:GPU:' + gpu_num)
+    with tf.device('/device:GPU:' + gpu_num):
         sample_size = tr_data.shape[0]
         if batch_size is None:
             # sample_size itself will be the batch_size.
