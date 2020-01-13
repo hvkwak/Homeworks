@@ -1,4 +1,4 @@
-### Computer Vision: Deep Learning, Tutorials, WiSe 19-20, Ruhr Uni Bochum, Germany
+### Computer Vision: Deep Learning Tutorials, WiSe 19-20, Ruhr Uni Bochum, Germany
 Please note: Unauthorized distribution of the codes is not allowed.
 
 ### Tutorial Contents
