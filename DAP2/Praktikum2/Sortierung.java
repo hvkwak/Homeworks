@@ -192,6 +192,7 @@ public class Sortierung {
 			}
 		}
 		// mean value of runtime
+		// Hello world!
 		double sum = 0;
 		for(int i=0; i < results.length; i++) {
 			sum = sum + results[i];
