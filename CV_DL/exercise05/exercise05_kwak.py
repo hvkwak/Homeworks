@@ -4,7 +4,7 @@
 '''
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-# enables GPU Computation
+## enables GPU Computation
 import utils
 import os
 # os.environ["CUDA_VISIBLE_DEVICES"] = str(utils.pick_gpu_lowest_memory())
