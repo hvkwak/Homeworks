@@ -2,4 +2,4 @@
 * A0: Introduction to C Programming
 * A1: Process Management: A small shell menu program with fork(), exec(), wait() system calls
 * A2: Thread Synchronizations: Vaccine Center hotlines with mutex and semaphore.
-
+* A3: Deadlocks: Archeologists work at excavation sites where equipments are unfortunately limited available.
