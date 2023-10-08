@@ -9,7 +9,7 @@ char grossbuch(char x){
     }
 }
 
-// wort1 is a pointer, but works fine. shit. check anagramme.cpp
+// wort1 is a pointer, but works fine. check anagramme.cpp
 void inverse(char const wort1[]){
     int i = 0;
     char x;
