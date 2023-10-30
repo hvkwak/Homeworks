@@ -3,7 +3,7 @@
 # this includes installation of LLVM, Clang
 
 version=16
-priority=100
+priority=20
 
 # install llvm
 sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
