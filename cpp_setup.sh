@@ -75,4 +75,4 @@ function register_clang_version {
         --slave   /usr/bin/clangd                clangd                /usr/bin/clangd-${version}
 }
 
-register_clang_version $version $priority
+sudo register_clang_version $version $priority
