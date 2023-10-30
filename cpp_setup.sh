@@ -26,8 +26,10 @@ sudo apt-get install libomp-${version}-dev
 
 function register_clang_version {
 
+    local version=${version}
+    local priority=${priority}
+
     sudo update-alternatives \
-        --verbose \
         --install /usr/bin/llvm-config       llvm-config      /usr/bin/llvm-config-${version} ${priority} \
         --slave   /usr/bin/llvm-ar           llvm-ar          /usr/bin/llvm-ar-${version} \
         --slave   /usr/bin/llvm-as           llvm-as          /usr/bin/llvm-as-${version} \
@@ -52,7 +54,6 @@ function register_clang_version {
         --slave   /usr/bin/llvm-strip        llvm-strip       /usr/bin/llvm-strip-${version}
 
     sudo update-alternatives \
-        --verbose \
         --install /usr/bin/clang                 clang                 /usr/bin/clang-${version} ${priority} \
         --slave   /usr/bin/clang++               clang++               /usr/bin/clang++-${version}  \
         --slave   /usr/bin/asan_symbolize        asan_symbolize        /usr/bin/asan_symbolize-${version} \
