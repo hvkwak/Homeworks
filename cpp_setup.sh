@@ -6,7 +6,7 @@ version=16
 priority=20
 
 # install llvm
-sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+# sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
 wget https://apt.llvm.org/llvm.sh
 chmod +x llvm.sh
 sudo ./llvm.sh $version all
@@ -26,7 +26,7 @@ sudo apt-get install libomp-${version}-dev
 
 function register_clang_version {
 
-    update-alternatives \
+    sudo update-alternatives \
         --verbose \
         --install /usr/bin/llvm-config       llvm-config      /usr/bin/llvm-config-${version} ${priority} \
         --slave   /usr/bin/llvm-ar           llvm-ar          /usr/bin/llvm-ar-${version} \
@@ -51,7 +51,7 @@ function register_clang_version {
         --slave   /usr/bin/llvm-objcopy      llvm-objcopy     /usr/bin/llvm-objcopy-${version} \
         --slave   /usr/bin/llvm-strip        llvm-strip       /usr/bin/llvm-strip-${version}
 
-    update-alternatives \
+    sudo update-alternatives \
         --verbose \
         --install /usr/bin/clang                 clang                 /usr/bin/clang-${version} ${priority} \
         --slave   /usr/bin/clang++               clang++               /usr/bin/clang++-${version}  \
