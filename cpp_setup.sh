@@ -2,7 +2,7 @@
 # run this script to setup cpp development environment
 # this includes installation of LLVM, Clang
 
-CLANG_VERSION=${CLANG_VERSION}
+CLANG_VERSION=16
 
 # install llvm
 sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
