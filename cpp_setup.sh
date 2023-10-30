@@ -15,13 +15,13 @@ sudo ./llvm.sh $version all
 sudo apt-get install clang-${version} clang-tools-${version} clang-${version}-doc libclang-common-${version}-dev libclang-${version}-dev libclang1-${version} clang-format-${version} python3-clang-${version} clangd-${version} clang-tidy-${version}
 
 # lldb
-sudo apt-get install lldb-16
+sudo apt-get install lldb-${version}
 # lld (linker)
-sudo apt-get install lld-16
+sudo apt-get install lld-${version}
 # libc++
-sudo apt-get install libc++-16-dev libc++abi-16-dev
+sudo apt-get install libc++-${version}-dev libc++abi-${version}-dev
 # OpenMP
-sudo apt-get install libomp-16-dev
+sudo apt-get install libomp-${version}-dev
 
 
 function register_clang_version {
