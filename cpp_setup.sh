@@ -26,8 +26,8 @@ sudo apt-get install libomp-${version}-dev
 
 function register_clang_version {
 
-    local version=${version}
-    local priority=${priority}
+    local version=$1
+    local priority=$2
 
     sudo update-alternatives \
         --install /usr/bin/llvm-config       llvm-config      /usr/bin/llvm-config-${version} ${priority} \
@@ -74,6 +74,17 @@ function register_clang_version {
         --slave   /usr/bin/lldb                  lldb                  /usr/bin/lldb-${version} \
         --slave   /usr/bin/lldb-server           lldb-server           /usr/bin/lldb-server-${version} \
         --slave   /usr/bin/clangd                clangd                /usr/bin/clangd-${version}
+        
+    sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang-${version} ${priority}
+    sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-${version} ${priority}
 }
 
-sudo register_clang_version $version $priority
+register_clang_version $version $priority
+
+
+# Note that this can be useful....use this in bashrc
+# $ export CC=/usr/bin/clang
+# $ export CXX=/usr/bin/clang++
+# $ cmake ..
+# -- The C compiler identification is Clang
+# -- The CXX compiler identification is Clang
