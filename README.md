@@ -1,5 +1,5 @@
 # Homeworks
-* This repository includes my homeworks and tutorial codes in the course of my degree program M.Sc. Datenwissenschaft at TU Dortmund, Germany
+This repository includes my homeworks and tutorial codes in the course of my degree program M.Sc. Datenwissenschaft at TU Dortmund, Germany
 
 ### Contents
 * CompStat: Computer-based statistics
