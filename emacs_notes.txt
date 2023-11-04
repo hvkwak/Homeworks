@@ -1,0 +1,11 @@
+Close only one window in Emacs: C-x 0
+	There is delete-window which is binded to C-x 0 by default.
+	https://stackoverflow.com/questions/17961449/close-only-one-window-in-emacs
+	
+Removing buffers from buffer list: C-x o
+	https://emacs.stackexchange.com/questions/48003/removing-buffers-from-buffer-list
+
+Close found file but not emacs: C-x k
+	kill-buffer, default
+	https://emacs.stackexchange.com/questions/34853/close-found-file-but-not-emacs
+	C-h f kill-buffer will show you what key (or keys) it's bound to
