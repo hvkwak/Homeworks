@@ -2,7 +2,7 @@
 # run this script to setup cpp development environment
 # this includes installation of LLVM, Clang
 
-version=16
+version=17
 priority=20
 
 # install llvm
