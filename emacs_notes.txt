@@ -1,11 +1,30 @@
 Close only one window in Emacs: C-x 0
 	There is delete-window which is binded to C-x 0 by default.
 	https://stackoverflow.com/questions/17961449/close-only-one-window-in-emacs
-	
-Removing buffers from buffer list: C-x o
+
+Moving over to the next window: C-x o
+Close buffer list: move over to the buffer list window, and press q
+
+List Buffers Basics:
+	https://www.gnu.org/software/emacs/manual/html_node/emacs/List-Buffers.html	
+Removing (multiple) buffers from buffer list:
 	https://emacs.stackexchange.com/questions/48003/removing-buffers-from-buffer-list
 
 Close found file but not emacs: C-x k
 	kill-buffer, default
 	https://emacs.stackexchange.com/questions/34853/close-found-file-but-not-emacs
 	C-h f kill-buffer will show you what key (or keys) it's bound to
+
+Install from the archives
+	M-x package-install and specify the package name.
+
+How to find more things to configure: describe
+	The two most useful functions in Emacs when you’re learning how to configure it are:
+	describe-variable (C-h v / Ctrl+H then V) - Shows documentation for any variable in Emacs
+	describe-function (C-h f / Ctrl+H then F) - Shows documentation for any function in Emacs
+	The best of both worlds: describe-symbol (C-h o / Ctrl+H then O)!
+
+Copy and Paste:
+	https://linuxhint.com/copying-and-pasting-in-emacs/
+
+The file with the ~ is a backup file that automatically gets created when you save a file. The #readme.txt# is the file being currently edited/in use (i.e., the autosave version). That will usually go away (unlike the ~ file) when you exit emacs normally (if it crashes or gets killed the # files may stay around).
