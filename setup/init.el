@@ -1,0 +1,1 @@
+/home/hyobin/.emacs.d/init.el
