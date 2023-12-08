@@ -2,9 +2,9 @@
 add_library(MathFunctions MathFunctions.cxx)
 
 # TODO 1: Add a library called MathFunctions with sources MathFunctions.cxx and mysqrt.cxx
-# Hint: You will need the add_library command
-# Note: remove mysqrt.cxx in TODO 14
 # add_library(MathFunctions MathFunctions.cxx mysqrt.cxx)
+# Note: remove mysqrt.cxx due to TODO 14
+
 
 # TODO 7: Create a variable USE_MYMATH using option and set default to ON
 option(USE_MYMATH "Use tutorial provided math implementation" ON)

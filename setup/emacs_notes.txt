@@ -27,4 +27,6 @@ How to find more things to configure: describe
 Copy and Paste:
 	https://linuxhint.com/copying-and-pasting-in-emacs/
 
+How do I execute (“evaluate”) a piece of Emacs Lisp code: C-M-x
+
 The file with the ~ is a backup file that automatically gets created when you save a file. The #readme.txt# is the file being currently edited/in use (i.e., the autosave version). That will usually go away (unlike the ~ file) when you exit emacs normally (if it crashes or gets killed the # files may stay around).
