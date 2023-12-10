@@ -1,0 +1,132 @@
+clang error during building gdb: 
+	https://bugs.freebsd.org/bugzilla/attachment.cgi?id=241700&action=edit
+	check + and - of the commit and change the codes!
+
+1	commit ae61525fcf456ab395d55c45492a106d1275873a
+2	Author: Simon Marchi <simon.marchi@efficios.com>
+3	Date:   2023-02-23 12:35:40 -0500
+4	
+5	    gdbsupport: ignore -Wenum-constexpr-conversion in enum-flags.h
+6	    
+7	    When building with clang 16, we get:
+8	    
+9	          CXX    gdb.o
+10	        In file included from /home/smarchi/src/binutils-gdb/gdb/gdb.c:19:
+11	        In file included from /home/smarchi/src/binutils-gdb/gdb/defs.h:65:
+12	        /home/smarchi/src/binutils-gdb/gdb/../gdbsupport/enum-flags.h:95:52: error: integer value -1 is outside the valid range of values [0, 15] for this enumeration type [-Wenum-constexpr-conversion]
+13	            integer_for_size<sizeof (T), static_cast<bool>(T (-1) < T (0))>::type
+14	                                                           ^
+15	    
+16	    The error message does not make it clear in the context of which enum
+17	    flag this fails (i.e. what is T in this context), but it doesn't really
+18	    matter, we have similar warning/errors for many of them, if we let the
+19	    build go through.
+20	    
+21	    clang is right that the value -1 is invalid for the enum type we cast -1
+22	    to.  However, we do need this expression in order to select an integer
+23	    type with the appropriate signedness.  That is, with the same signedness
+24	    as the underlying type of the enum.
+25	    
+26	    I first wondered if that was really needed, if we couldn't use
+27	    std::underlying_type for that.  It turns out that the comment just above
+28	    says:
+29	    
+30	        /* Note that std::underlying_type<enum_type> is not what we want here,
+31	           since that returns unsigned int even when the enum decays to signed
+32	           int.  */
+33	    
+34	    I was surprised, because std::is_signed<std::underlying_type<enum_type>>
+35	    returns the right thing.  So I tried replacing all this with
+36	    std::underlying_type, see if that would work.  Doing so causes some
+37	    build failures in unittests/enum-flags-selftests.c:
+38	    
+39	          CXX    unittests/enum-flags-selftests.o
+40	        /home/smarchi/src/binutils-gdb/gdb/unittests/enum-flags-selftests.c:254:1: error: static assertion failed due to requirement 'gdb::is_same<selftests::enum_flags_tests::check_valid_expr254::archetype<enum_flags<s
+41	        elftests::enum_flags_tests::RE>, selftests::enum_flags_tests::RE, enum_flags<selftests::enum_flags_tests::RE2>, selftests::enum_flags_tests::RE2, enum_flags<selftests::enum_flags_tests::URE>, selftests::enum_fla
+42	        gs_tests::URE, int>, selftests::enum_flags_tests::check_valid_expr254::archetype<enum_flags<selftests::enum_flags_tests::RE>, selftests::enum_flags_tests::RE, enum_flags<selftests::enum_flags_tests::RE2>, selfte
+43	        sts::enum_flags_tests::RE2, enum_flags<selftests::enum_flags_tests::URE>, selftests::enum_flags_tests::URE, unsigned int>>::value == true':
+44	        CHECK_VALID (true,  int,  true ? EF () : EF2 ())
+45	        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+46	        /home/smarchi/src/binutils-gdb/gdb/unittests/enum-flags-selftests.c:91:3: note: expanded from macro 'CHECK_VALID'
+47	          CHECK_VALID_EXPR_6 (EF, RE, EF2, RE2, UEF, URE, VALID, EXPR_TYPE, EXPR)
+48	          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+49	        /home/smarchi/src/binutils-gdb/gdb/../gdbsupport/valid-expr.h:105:3: note: expanded from macro 'CHECK_VALID_EXPR_6'
+50	          CHECK_VALID_EXPR_INT (ESC_PARENS (typename T1, typename T2,           \
+51	          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+52	        /home/smarchi/src/binutils-gdb/gdb/../gdbsupport/valid-expr.h:66:3: note: expanded from macro 'CHECK_VALID_EXPR_INT'
+53	          static_assert (gdb::is_detected_exact<archetype<TYPES, EXPR_TYPE>,    \
+54	          ^              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+55	    
+56	    This is a bit hard to decode, but basically enumerations have the
+57	    following funny property that they decay into a signed int, even if
+58	    their implicit underlying type is unsigned.  This code:
+59	    
+60	        enum A {};
+61	        enum B {};
+62	    
+63	        int main() {
+64	          std::cout << std::is_signed<std::underlying_type<A>::type>::value
+65	                    << std::endl;
+66	          std::cout << std::is_signed<std::underlying_type<B>::type>::value
+67	                    << std::endl;
+68	          auto result = true ? A() : B();
+69	          std::cout << std::is_signed<decltype(result)>::value << std::endl;
+70	        }
+71	    
+72	    produces:
+73	    
+74	        0
+75	        0
+76	        1
+77	    
+78	    So, the "CHECK_VALID" above checks that this property works for enum flags the
+79	    same way as it would if you were using their underlying enum types.  And
+80	    somehow, changing integer_for_size to use std::underlying_type breaks that.
+81	    
+82	    Since the current code does what we want, and I don't see any way of doing it
+83	    differently, ignore -Wenum-constexpr-conversion around it.
+84	    
+85	    Change-Id: Ibc82ae7bbdb812102ae3f1dd099fc859dc6f3cc2
+86	
+87	diff --git gdbsupport/enum-flags.h gdbsupport/enum-flags.h
+88	index 700037f6126..41ac7838f06 100644
+89	--- gdbsupport/enum-flags.h
+90	+++ gdbsupport/enum-flags.h
+91	@@ -91,9 +91,12 @@ template<> struct integer_for_size<8, 1> { typedef int64_t type; };
+92	 template<typename T>
+93	 struct enum_underlying_type
+94	 {
+95	+  DIAGNOSTIC_PUSH
+96	+  DIAGNOSTIC_IGNORE_ENUM_CONSTEXPR_CONVERSION
+97	   typedef typename
+98	     integer_for_size<sizeof (T), static_cast<bool>(T (-1) < T (0))>::type
+99	     type;
+100	+  DIAGNOSTIC_POP
+101	 };
+102	 
+103	 namespace enum_flags_detail
+104	diff --git include/diagnostics.h include/diagnostics.h
+105	index d3ff27bc008..41e6db65391 100644
+106	--- include/diagnostics.h
+107	+++ include/diagnostics.h
+108	@@ -76,6 +76,11 @@
+109	 # define DIAGNOSTIC_ERROR_SWITCH \
+110	   DIAGNOSTIC_ERROR ("-Wswitch")
+111	 
+112	+# if __has_warning ("-Wenum-constexpr-conversion")
+113	+#  define DIAGNOSTIC_IGNORE_ENUM_CONSTEXPR_CONVERSION \
+114	+   DIAGNOSTIC_IGNORE ("-Wenum-constexpr-conversion")
+115	+# endif
+116	+
+117	 #elif defined (__GNUC__) /* GCC */
+118	 
+119	 # define DIAGNOSTIC_IGNORE_DEPRECATED_DECLARATIONS \
+120	@@ -155,4 +160,8 @@
+121	 # define DIAGNOSTIC_ERROR_SWITCH
+122	 #endif
+123	 
+124	+#ifndef DIAGNOSTIC_IGNORE_ENUM_CONSTEXPR_CONVERSION
+125	+# define DIAGNOSTIC_IGNORE_ENUM_CONSTEXPR_CONVERSION
+126	+#endif
+127	+
+128	 #endif /* DIAGNOSTICS_H */
