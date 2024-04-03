@@ -1,0 +1,6 @@
+#include <cmath>
+#include "moivreBinetEidp.hpp"
+
+long long moivreBinetEidp(unsigned int n){
+  
+}

@@ -1,0 +1,87 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "eidp-sequence",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "eidp-sequence::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-eidp-sequence-Debug-e19bf3e145d39565c7b7.json",
+					"name" : "eidp-sequence",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "itEidp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-itEidp-Debug-b00b52a9c8902b12228a.json",
+					"name" : "itEidp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "moivreBinetEidP::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-moivreBinetEidP-Debug-092b029cbdedb5b336e6.json",
+					"name" : "moivreBinetEidP",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "rekEidp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-rekEidp-Debug-7f2d1fd617438203df80.json",
+					"name" : "rekEidp",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/hyobin/Documents/Blatt06/build",
+		"source" : "/home/hyobin/Documents/Blatt06"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

@@ -1,0 +1,14 @@
+#include "itEidp.hpp"
+
+long long itEidp(unsigned int n){
+
+  long long eidp1 = 1;
+  long long eidp2 = 1;
+  long long eidp3 = eidp1;
+  for (int i = 2; i < n; ++i) {
+    eidp3 = eidp2 + 3*eidp1;
+    eidp1 = eidp2;
+    eidp2 = eidp3;
+  }
+  return eidp3;
+}

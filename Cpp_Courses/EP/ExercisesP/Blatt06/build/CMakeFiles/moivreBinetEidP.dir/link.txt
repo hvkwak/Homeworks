@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar qc libmoivreBinetEidP.a CMakeFiles/moivreBinetEidP.dir/src/moivreBinetEidP.cpp.o
+/usr/bin/llvm-ranlib libmoivreBinetEidP.a

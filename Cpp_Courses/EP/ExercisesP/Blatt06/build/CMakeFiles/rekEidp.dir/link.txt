@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar qc librekEidp.a CMakeFiles/rekEidp.dir/src/rekEidp.cpp.o
+/usr/bin/llvm-ranlib librekEidp.a
