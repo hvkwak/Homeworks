@@ -1,0 +1,13 @@
+*.*~
+*.idx
+*.json
+*.cmake
+*.bin
+*.out
+*.a
+*.d
+*.make
+*.ts
+*.check_cache
+*.log
+
