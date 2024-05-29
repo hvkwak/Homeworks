@@ -2,7 +2,7 @@
 This repository includes my personal trainings and tutorial codes in the course of my degree program M.Sc. Datenwissenschaft at TU Dortmund
 
 ### Contents
-* Cpp_Courses: Modern C++ Course For CV (Uni Bonn, 2020), Introduction to Programming in C++ (TU Dortmund)
+* Cpp_Courses: Introduction to Programming in C++ (TU Dortmund 2020), Modern C++ Course For CV (Uni Bonn, 2020)
 * CMake_Tutorials: CMake Tutorials at cmake.org
 * CompStat: Computer-based statistics
 * Betriebssysteme: Operating Systems Course Tutorials, SS21, TU Dortmund 
