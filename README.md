@@ -1,5 +1,5 @@
 # Homeworks
-This repository includes my tutorial codes in the course of my degree program M.Sc. Datenwissenschaft (Data Science) at TU Dortmund, as well as my personal trainings.
+This repository includes my tutorial codes in the course of my degree program M.Sc. Datenwissenschaft (Data Science) at TU Dortmund and my personal trainings.
 
 ### Contents
 <!--Modern C++ Course For CV (Uni Bonn, 2020)-->
