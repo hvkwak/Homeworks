@@ -1,8 +1,9 @@
 # Homeworks
-This repository includes my personal trainings and tutorial codes in the course of my degree program M.Sc. Datenwissenschaft (Data Science) at TU Dortmund
+This repository includes my tutorial codes in the course of my degree program M.Sc. Datenwissenschaft (Data Science) at TU Dortmund, as well as my personal trainings.
 
 ### Contents
 <!--Modern C++ Course For CV (Uni Bonn, 2020)-->
+* cuda_programming_works: CUDA programming exercises codes while reading the book "Professional CUDA C Programming"
 * MIPS_Tutorials: MIPS Assembly Programming Tutorials (Amell Peralta)
 * Cpp_Courses: Introduction to Programming in C++, SoSe20, TU Dortmund
 * CMake_Tutorials: CMake Tutorials at cmake.org
