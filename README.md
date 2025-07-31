@@ -3,7 +3,6 @@ This repository includes my tutorial codes in the course of my degree program M.
 
 ### Contents
 <!--Modern C++ Course For CV (Uni Bonn, 2020)-->
-* cuda_programming_works: CUDA programming exercises codes while reading the book "Professional CUDA C Programming"
 * MIPS_Tutorials: MIPS Assembly Programming Tutorials (Amell Peralta)
 * Cpp_Courses: Introduction to Programming in C++, SoSe20, TU Dortmund
 * CMake_Tutorials: CMake Tutorials at cmake.org
